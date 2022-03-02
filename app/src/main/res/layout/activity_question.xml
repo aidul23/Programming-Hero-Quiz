@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="2/10"
+                android:text="1/1"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="300"
+                android:text="0"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -73,17 +73,33 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_count_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linearlayout_2"/>
+
     <LinearLayout
         android:id="@+id/linearlayout_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/view_background"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@id/linearlayout_1"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/tv_count_down"
+        tools:layout_editor_absoluteX="32dp">
+
         <TextView
             android:id="@+id/tv_quiz_point"
             android:layout_width="wrap_content"
@@ -93,14 +109,27 @@
             android:textColor="@color/black"
             android:textStyle="bold" />
 
-
-        <ImageView
-            android:id="@+id/question_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/image_constrain_layout"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:id="@+id/question_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:scaleType="centerCrop" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/tv_quiz_question"
@@ -120,7 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout_2"
         >
 
         <Button

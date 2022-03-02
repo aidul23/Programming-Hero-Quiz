@@ -45,7 +45,7 @@
             android:id="@+id/tv_high_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="200 Point"
+            android:text="0 Point"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"

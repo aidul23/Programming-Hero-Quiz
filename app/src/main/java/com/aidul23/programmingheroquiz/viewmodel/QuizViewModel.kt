@@ -1,5 +1,6 @@
 package com.aidul23.programmingheroquiz.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,9 +13,9 @@ class QuizViewModel(private val quizRepository: QuizRepository) : ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
             quizRepository.getQuiz()
+            Log.d("VIEWMODEL", "called")
         }
     }
-
     val quiz : LiveData<Quiz>
         get() = quizRepository.quiz
 }
