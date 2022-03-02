@@ -1,9 +1,11 @@
 package com.aidul23.programmingheroquiz
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.JsonReader
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -13,12 +15,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.aidul23.programmingheroquiz.api.QuizApi
 import com.aidul23.programmingheroquiz.api.RetrofitHelper
+import com.aidul23.programmingheroquiz.constants.Constant.STRING_EXTRA_SCORE
 import com.aidul23.programmingheroquiz.databinding.ActivityQuestionBinding
 import com.aidul23.programmingheroquiz.model.Question
 import com.aidul23.programmingheroquiz.repository.QuizRepository
 import com.aidul23.programmingheroquiz.viewmodel.QuizViewModel
 import com.aidul23.programmingheroquiz.viewmodel.QuizViewModelFactory
 import com.bumptech.glide.Glide
+import com.google.gson.JsonObject
+import org.json.JSONObject
 
 class QuestionActivity : AppCompatActivity() {
 
@@ -29,6 +34,8 @@ class QuestionActivity : AppCompatActivity() {
 
     private var totalScore: Int = 0
 
+    lateinit var json: JsonReader
+
     private var noOfQuestion: Int = 0
     private var totalNoOfQuestion: Int ?= null
     private lateinit var countDownTimer: CountDownTimer
@@ -36,6 +43,8 @@ class QuestionActivity : AppCompatActivity() {
     val handler = Handler()
     var myList = ArrayList<Question>()
     var mutableLiveData = MutableLiveData<Question>()
+
+    var backPressedTime: Long = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,9 +82,9 @@ class QuestionActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show()
                 binding.buttonOption1.setBackgroundColor(Color.RED)
-                if (correctAnswer == "B") {
+                if (mutableLiveData.value?.correctAnswer == "B") {
                     binding.buttonOption2.setBackgroundColor(Color.GREEN)
-                } else if (correctAnswer == "C") {
+                } else if (mutableLiveData.value?.correctAnswer == "C") {
                     binding.buttonOption3.setBackgroundColor(Color.GREEN)
                 } else {
                     binding.buttonOption4.setBackgroundColor(Color.GREEN)
@@ -84,8 +93,6 @@ class QuestionActivity : AppCompatActivity() {
             makeButtonUnclickable()
 
             handler.postDelayed({
-                makeButtonClickable()
-                resetButton()
                 noOfQuestion++
                 if(noOfQuestion <= totalNoOfQuestion!!) {
                     mutableLiveData.value = myList.get(noOfQuestion)
@@ -93,7 +100,7 @@ class QuestionActivity : AppCompatActivity() {
                 }
                 else {
                     handler.postDelayed({
-                        this.finish()
+                        finishQuiz()
                     },1000)
                 }
             }, 2000)
@@ -108,9 +115,9 @@ class QuestionActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show()
                 binding.buttonOption2.setBackgroundColor(Color.RED)
-                if (correctAnswer == "A") {
+                if (mutableLiveData.value?.correctAnswer == "A") {
                     binding.buttonOption1.setBackgroundColor(Color.GREEN)
-                } else if (correctAnswer == "C") {
+                } else if (mutableLiveData.value?.correctAnswer == "C") {
                     binding.buttonOption3.setBackgroundColor(Color.GREEN)
                 } else {
                     binding.buttonOption4.setBackgroundColor(Color.GREEN)
@@ -118,15 +125,13 @@ class QuestionActivity : AppCompatActivity() {
             }
             makeButtonUnclickable()
             handler.postDelayed({
-                makeButtonClickable()
-                resetButton()
                 noOfQuestion++
                 if(noOfQuestion <= totalNoOfQuestion!!) {
                     mutableLiveData.value = myList.get(noOfQuestion)
                     nextQuiz(mutableLiveData)
                 } else {
                     handler.postDelayed({
-                        this.finish()
+                        finishQuiz()
                     },1000)
                 }
             }, 2000)
@@ -141,24 +146,22 @@ class QuestionActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show()
                 binding.buttonOption3.setBackgroundColor(Color.RED)
-                if (correctAnswer == "A") {
+                if (mutableLiveData.value?.correctAnswer == "A") {
                     binding.buttonOption1.setBackgroundColor(Color.GREEN)
-                } else if (correctAnswer == "B") {
+                } else if (mutableLiveData.value?.correctAnswer == "B") {
                     binding.buttonOption2.setBackgroundColor(Color.GREEN)
                 } else {
                     binding.buttonOption4.setBackgroundColor(Color.GREEN)
                 }
             }
             handler.postDelayed({
-                makeButtonClickable()
-                resetButton()
                 noOfQuestion++
                 if(noOfQuestion <= totalNoOfQuestion!!) {
                     mutableLiveData.value = myList.get(noOfQuestion)
                     nextQuiz(mutableLiveData)
                 } else {
                     handler.postDelayed({
-                        this.finish()
+                        finishQuiz()
                     },1000)
                 }
             }, 2000)
@@ -172,17 +175,15 @@ class QuestionActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show()
                 binding.buttonOption4.setBackgroundColor(Color.RED)
-                if (correctAnswer == "A") {
+                if (mutableLiveData.value?.correctAnswer == "A") {
                     binding.buttonOption1.setBackgroundColor(Color.GREEN)
-                } else if (correctAnswer == "B") {
+                } else if (mutableLiveData.value?.correctAnswer == "B") {
                     binding.buttonOption2.setBackgroundColor(Color.GREEN)
                 } else {
                     binding.buttonOption3.setBackgroundColor(Color.GREEN)
                 }
             }
             handler.postDelayed({
-                makeButtonClickable()
-                resetButton()
                 noOfQuestion++
                 if(noOfQuestion <= totalNoOfQuestion!!) {
                     mutableLiveData.value = myList.get(noOfQuestion)
@@ -190,7 +191,7 @@ class QuestionActivity : AppCompatActivity() {
                 }
                 else {
                     handler.postDelayed({
-                        this.finish()
+                        finishQuiz()
                     },1000)
                 }
             }, 2000)
@@ -215,6 +216,11 @@ class QuestionActivity : AppCompatActivity() {
         binding.buttonOption2.setBackgroundColor(Color.WHITE)
         binding.buttonOption3.setBackgroundColor(Color.WHITE)
         binding.buttonOption4.setBackgroundColor(Color.WHITE)
+
+        binding.buttonOption1.visibility = View.VISIBLE
+        binding.buttonOption2.visibility = View.VISIBLE
+        binding.buttonOption3.visibility = View.VISIBLE
+        binding.buttonOption4.visibility = View.VISIBLE
     }
 
     private fun nextQuiz(myList: MutableLiveData<Question>) {
@@ -223,10 +229,24 @@ class QuestionActivity : AppCompatActivity() {
         binding.tvQuizPoint.text =
             myList.value?.score.toString() + " Point"
 
+
+        makeButtonClickable()
+        resetButton()
+
         binding.buttonOption1.text = myList.value?.answers?.A
         binding.buttonOption2.text = myList.value?.answers?.B
-        binding.buttonOption3.text = myList.value?.answers?.C
-        binding.buttonOption4.text = myList.value?.answers?.D
+        if(!myList.value?.answers?.C.isNullOrBlank()) {
+            binding.buttonOption3.text = myList.value?.answers?.C
+        } else {
+            binding.buttonOption3.visibility = View.GONE
+        }
+
+        if(!myList.value?.answers?.D.isNullOrBlank()) {
+            binding.buttonOption4.text = myList.value?.answers?.D
+        } else {
+            binding.buttonOption4.visibility = View.GONE
+        }
+
 
         if (myList.value?.questionImageUrl != null) {
             binding.imageConstrainLayout.visibility = View.VISIBLE
@@ -240,72 +260,23 @@ class QuestionActivity : AppCompatActivity() {
         binding.tvQuestionNo.text = "${this.noOfQuestion + 1}/" + totalNoOfQuestion
         binding.tvScoreNo.text = totalScore.toString()
 
-//        myList[noOfQuestion].answers.A?.let {
-//            if (it.hashCode() == null) {
-//                binding.buttonOption1.visibility = View.GONE
-//            } else {
-//                binding.buttonOption1.text = it
-//            }
-//
-//        }
-//        myList[noOfQuestion].answers.B?.let {
-//            if (it.hashCode() == null) {
-//                binding.buttonOption2.visibility = View.GONE
-//            } else {
-//                binding.buttonOption2.text = it
-//            }
-//        }
-//        myList[noOfQuestion].answers.C?.let {
-//            if (it.hashCode() == null) {
-//                binding.buttonOption3.visibility = View.GONE
-//                Log.d("Button", "nextQuiz: buttonC")
-//            } else {
-//                binding.buttonOption3.text = it
-//            }
-//        }
-//        myList[noOfQuestion].answers.D?.let {
-//            if (it.hashCode() == null) {
-//                binding.buttonOption4.visibility = View.GONE
-////                Log.d("Button", "nextQuiz: buttonD")
-////            } else {
-////                binding.buttonOption4.text = it
-////            }
-////        }
-//
-//
+    }
 
-//
-//
-//
+    private fun finishQuiz() {
+        val resultIntent = Intent()
+        resultIntent.putExtra(STRING_EXTRA_SCORE, totalScore)
+        Log.d("TOTAL_SCORE", "finishQuiz: "+totalScore)
+        setResult(RESULT_OK, resultIntent)
+        finish()
+    }
 
-//
-//
-//                //countdown
-////                timeLeftInMillis = COUNTDOWN_IN_MILLIS as Long
-////
-////                countDownTimer = object: CountDownTimer(timeLeftInMillis!!, 1000) {
-////                    override fun onTick(millisUntilFinished: Long) {
-////                        timeLeftInMillis = millisUntilFinished
-////                        updateCountDownText()
-////                    }
-////
-////                    override fun onFinish() {
-////                        timeLeftInMillis = 0
-////                        updateCountDownText()
-////                    }
-////                }
-////                countDownTimer.start()
-//            }
-//        }
-
-//    private fun updateCountDownText() {
-//        val min = (timeLeftInMillis?.div(1000))?.div(60)
-//        val sec = (timeLeftInMillis?.div(1000))?.rem(60)
-//
-//        val timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", min, sec)
-//        binding.tvCountDown.text = timeFormatted
-//    }
-
+    override fun onBackPressed() {
+        if(backPressedTime + 2000 > System.currentTimeMillis()) {
+            finishQuiz()
+        } else {
+            Toast.makeText(this,"Press Again to Exit", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 
 }

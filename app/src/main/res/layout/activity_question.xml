@@ -77,9 +77,10 @@
         android:id="@+id/tv_count_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="20"
+        android:text="20s"
         android:textColor="@color/white"
         android:textSize="34sp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/linearlayout_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -157,8 +158,9 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAllCaps="false"
             android:backgroundTint="@color/white"
-            android:text="option 1"
+            android:text="Option 1"
             android:textColor="@color/black" />
 
         <Button
@@ -166,8 +168,9 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAllCaps="false"
             android:backgroundTint="@color/white"
-            android:text="option 2"
+            android:text="Option 2"
             android:textColor="@color/black" />
 
         <Button
@@ -175,8 +178,9 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAllCaps="false"
             android:backgroundTint="@color/white"
-            android:text="option 3"
+            android:text="Option 3"
             android:textColor="@color/black" />
 
         <Button
@@ -184,8 +188,9 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAllCaps="false"
             android:backgroundTint="@color/white"
-            android:text="option 4"
+            android:text="Option 4"
             android:textColor="@color/black" />
 
     </LinearLayout>
