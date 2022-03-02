@@ -29,21 +29,12 @@ class QuestionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuestionBinding
     lateinit var quizViewModel: QuizViewModel
-
-    private var correctAnswer: String? = null
-
     private var totalScore: Int = 0
-
-    lateinit var json: JsonReader
-
     private var noOfQuestion: Int = 0
     private var totalNoOfQuestion: Int ?= null
-    private lateinit var countDownTimer: CountDownTimer
-    private var timeLeftInMillis: Long? = 0
     val handler = Handler()
     var myList = ArrayList<Question>()
     var mutableLiveData = MutableLiveData<Question>()
-
     var backPressedTime: Long = 0L
 
 

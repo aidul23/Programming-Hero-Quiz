@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quiz"
+            android:fontFamily="@font/leaguespartan_regular"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -37,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Highscore"
+            android:fontFamily="@font/leaguespartan_regular"
             android:layout_marginTop="44dp"
             android:textColor="@color/white"
             android:textSize="18sp"/>
@@ -46,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0 Point"
+            android:fontFamily="@font/leaguespartan_regular"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
@@ -58,6 +61,9 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="Start"
+            android:textSize="18sp"
+            android:fontFamily="@font/leaguespartan_regular"
+            android:textStyle="bold"
             android:backgroundTint="@color/white"
             android:textColor="@color/black"
             android:layout_marginTop="64dp"/>

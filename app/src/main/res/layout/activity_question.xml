@@ -27,6 +27,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Question: "
+                android:fontFamily="@font/leaguespartan_regular"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="1/1"
+                android:fontFamily="@font/leaguespartan_regular"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Score: "
+                android:fontFamily="@font/leaguespartan_regular"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@id/tv_score_no"
@@ -61,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="0"
+                android:fontFamily="@font/leaguespartan_regular"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -78,6 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="20s"
+        android:fontFamily="@font/leaguespartan_regular"
         android:textColor="@color/white"
         android:textSize="34sp"
         android:layout_marginTop="16dp"
@@ -105,8 +112,10 @@
             android:id="@+id/tv_quiz_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:layout_gravity="center"
             android:text="100 Point"
+            android:fontFamily="@font/leaguespartan_regular"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -139,6 +148,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:text="What is this logo?"
+            android:textSize="20sp"
+            android:fontFamily="@font/leaguespartan_regular"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -161,6 +172,9 @@
             android:textAllCaps="false"
             android:backgroundTint="@color/white"
             android:text="Option 1"
+            android:textSize="18sp"
+            android:fontFamily="@font/leaguespartan_regular"
+            android:textStyle="bold"
             android:textColor="@color/black" />
 
         <Button
@@ -171,6 +185,9 @@
             android:textAllCaps="false"
             android:backgroundTint="@color/white"
             android:text="Option 2"
+            android:textSize="18sp"
+            android:fontFamily="@font/leaguespartan_regular"
+            android:textStyle="bold"
             android:textColor="@color/black" />
 
         <Button
@@ -181,6 +198,9 @@
             android:textAllCaps="false"
             android:backgroundTint="@color/white"
             android:text="Option 3"
+            android:textSize="18sp"
+            android:fontFamily="@font/leaguespartan_regular"
+            android:textStyle="bold"
             android:textColor="@color/black" />
 
         <Button
@@ -191,6 +211,9 @@
             android:textAllCaps="false"
             android:backgroundTint="@color/white"
             android:text="Option 4"
+            android:textSize="18sp"
+            android:fontFamily="@font/leaguespartan_regular"
+            android:textStyle="bold"
             android:textColor="@color/black" />
 
     </LinearLayout>
