@@ -10,25 +10,4 @@ import com.aidul23.programmingheroquiz.model.Quiz
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MyApplication: Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-    }
-
-//    companion object {
-//
-//        fun get(): Quiz{
-//            var quiz = Quiz(emptyList())
-//            val quizService = RetrofitHelper.getInstance().create(QuizApi::class.java)
-//            GlobalScope.launch {
-//                quiz = quizService.getQuiz().let {
-//                    it.body()!!
-//                }
-//            }
-//            Log.d("APPLICATION", "get: "+quiz)
-//            return quiz
-//        }
-//    }
-}
+class MyApplication: Application()
