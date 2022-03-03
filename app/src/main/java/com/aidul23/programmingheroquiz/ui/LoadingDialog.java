@@ -1,7 +1,9 @@
-package com.aidul23.programmingheroquiz;
+package com.aidul23.programmingheroquiz.ui;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+
+import com.aidul23.programmingheroquiz.R;
 
 import androidx.appcompat.app.AlertDialog;
 

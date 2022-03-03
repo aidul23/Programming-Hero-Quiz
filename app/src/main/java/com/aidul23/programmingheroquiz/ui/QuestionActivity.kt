@@ -1,11 +1,10 @@
-package com.aidul23.programmingheroquiz
+package com.aidul23.programmingheroquiz.ui
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.JsonReader
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -15,34 +14,30 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.aidul23.programmingheroquiz.api.QuizApi
 import com.aidul23.programmingheroquiz.api.RetrofitHelper
-import com.aidul23.programmingheroquiz.constants.Constant
-import com.aidul23.programmingheroquiz.constants.Constant.STRING_EXTRA_SCORE
 import com.aidul23.programmingheroquiz.databinding.ActivityQuestionBinding
 import com.aidul23.programmingheroquiz.model.Question
 import com.aidul23.programmingheroquiz.repository.QuizRepository
 import com.aidul23.programmingheroquiz.viewmodel.QuizViewModel
 import com.aidul23.programmingheroquiz.viewmodel.QuizViewModelFactory
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.Resource
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonObject
-import org.json.JSONObject
-import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 class QuestionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuestionBinding
     lateinit var quizViewModel: QuizViewModel
-    private var totalScore: Int = 0
+    private var totalScore = 0
     private var noOfQuestion: Int = 0
     private var totalNoOfQuestion: Int? = null
     val handler = Handler()
     var myList = ArrayList<Question>()
     var mutableLiveData = MutableLiveData<Question>()
     var backPressedTime: Long = 0L
-    val resultIntent = Intent()
+    var resultIntent = Intent()
+
+    companion object {
+        const val STRING_EXTRA_SCORE = "extraScore"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +49,8 @@ class QuestionActivity : AppCompatActivity() {
         val quizService = RetrofitHelper.getInstance().create(QuizApi::class.java)
         val repository = QuizRepository(quizService)
 
-        val loadingDialog = LoadingDialog(this)
+        val loadingDialog =
+            LoadingDialog(this)
 
         loadingDialog.startLoadingDialog()
 
@@ -74,11 +70,10 @@ class QuestionActivity : AppCompatActivity() {
                 totalNoOfQuestion = it.questions.size
                 mutableLiveData.value = myList.get(noOfQuestion)
                 nextQuiz(mutableLiveData)
-//                correctAnswer = myList.get(noOfQuestion).correctAnswer
-                Log.d("MY_LIST", "onCreate: " + myList)
             }
         })
-        callCountDown()
+
+//        callCountDown()
 
         binding.buttonOption1.setOnClickListener {
             if (mutableLiveData.value?.correctAnswer == "A") {
@@ -100,17 +95,14 @@ class QuestionActivity : AppCompatActivity() {
             makeButtonUnclickable()
 
             handler.postDelayed({
-                noOfQuestion++
-                if (noOfQuestion <= totalNoOfQuestion!!) {
-                    mutableLiveData.value = myList.get(noOfQuestion)
-                    nextQuiz(mutableLiveData)
-                    resultIntent.putExtra(STRING_EXTRA_SCORE, totalScore)
-                    setResult(RESULT_OK, resultIntent)
-                    Log.d("TotalScore", "onCreate: " + totalScore)
-                } else {
-                    handler.postDelayed({
+                if (noOfQuestion <= totalNoOfQuestion!! - 1) {
+                    noOfQuestion++
+                    if (noOfQuestion > totalNoOfQuestion!! - 1) {
                         finishQuiz()
-                    }, 1000)
+                    } else {
+                        mutableLiveData.value = myList.get(noOfQuestion)
+                        nextQuiz(mutableLiveData)
+                    }
                 }
             }, 2000)
 
@@ -134,18 +126,16 @@ class QuestionActivity : AppCompatActivity() {
                 }
             }
             makeButtonUnclickable()
+
             handler.postDelayed({
-                noOfQuestion++
-                if (noOfQuestion <= totalNoOfQuestion!!) {
-                    mutableLiveData.value = myList.get(noOfQuestion)
-                    nextQuiz(mutableLiveData)
-                    resultIntent.putExtra(STRING_EXTRA_SCORE, totalScore)
-                    setResult(RESULT_OK, resultIntent)
-                    Log.d("TotalScore", "onCreate: " + totalScore)
-                } else {
-                    handler.postDelayed({
+                if (noOfQuestion <= totalNoOfQuestion!! - 1) {
+                    noOfQuestion++
+                    if (noOfQuestion > totalNoOfQuestion!! - 1) {
                         finishQuiz()
-                    }, 1000)
+                    } else {
+                        mutableLiveData.value = myList.get(noOfQuestion)
+                        nextQuiz(mutableLiveData)
+                    }
                 }
             }, 2000)
         }
@@ -168,18 +158,18 @@ class QuestionActivity : AppCompatActivity() {
                     binding.buttonOption4.setBackgroundColor(Color.GREEN)
                 }
             }
+            makeButtonUnclickable()
+
+
             handler.postDelayed({
-                noOfQuestion++
-                if (noOfQuestion <= totalNoOfQuestion!!) {
-                    mutableLiveData.value = myList.get(noOfQuestion)
-                    nextQuiz(mutableLiveData)
-                    resultIntent.putExtra(STRING_EXTRA_SCORE, totalScore)
-                    setResult(RESULT_OK, resultIntent)
-                    Log.d("TotalScore", "onCreate: " + totalScore)
-                } else {
-                    handler.postDelayed({
+                if (noOfQuestion <= totalNoOfQuestion!! - 1) {
+                    noOfQuestion++
+                    if (noOfQuestion > totalNoOfQuestion!! - 1) {
                         finishQuiz()
-                    }, 1000)
+                    } else {
+                        mutableLiveData.value = myList.get(noOfQuestion)
+                        nextQuiz(mutableLiveData)
+                    }
                 }
             }, 2000)
         }
@@ -189,7 +179,6 @@ class QuestionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Correct Answer", Toast.LENGTH_SHORT).show()
                 binding.buttonOption4.setBackgroundColor(Color.GREEN)
                 totalScore += mutableLiveData.value!!.score
-
 
             } else {
                 Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show()
@@ -202,23 +191,23 @@ class QuestionActivity : AppCompatActivity() {
                     binding.buttonOption3.setBackgroundColor(Color.GREEN)
                 }
             }
+            makeButtonUnclickable()
+
             handler.postDelayed({
-                noOfQuestion++
-                if (noOfQuestion <= totalNoOfQuestion!!) {
-                    mutableLiveData.value = myList.get(noOfQuestion)
-                    nextQuiz(mutableLiveData)
-                    resultIntent.putExtra(STRING_EXTRA_SCORE, totalScore)
-                    setResult(RESULT_OK, resultIntent)
-                    Log.d("TotalScore", "onCreate: " + totalScore)
-                } else {
-                    handler.postDelayed({
+                if (noOfQuestion <= totalNoOfQuestion!! - 1) {
+                    noOfQuestion++
+                    if (noOfQuestion > totalNoOfQuestion!! - 1) {
                         finishQuiz()
-                    }, 1000)
+                    } else {
+                        mutableLiveData.value = myList.get(noOfQuestion)
+                        nextQuiz(mutableLiveData)
+                    }
                 }
             }, 2000)
         }
 
     }
+
 
     private fun makeButtonUnclickable() {
         binding.buttonOption1.isClickable = false
@@ -252,12 +241,12 @@ class QuestionActivity : AppCompatActivity() {
         binding.tvQuizPoint.text =
             myList.value?.score.toString() + " Point"
 
-
         makeButtonClickable()
         resetButton()
 
         binding.buttonOption1.text = myList.value?.answers?.A
         binding.buttonOption2.text = myList.value?.answers?.B
+
         if (!myList.value?.answers?.C.isNullOrBlank()) {
             binding.buttonOption3.text = myList.value?.answers?.C
         } else {
@@ -270,7 +259,6 @@ class QuestionActivity : AppCompatActivity() {
             binding.buttonOption4.visibility = View.GONE
         }
 
-
         if (myList.value?.questionImageUrl != null) {
             binding.imageConstrainLayout.visibility = View.VISIBLE
             Glide.with(this)
@@ -282,7 +270,6 @@ class QuestionActivity : AppCompatActivity() {
 
         binding.tvQuestionNo.text = "${this.noOfQuestion + 1}/" + totalNoOfQuestion
         binding.tvScoreNo.text = totalScore.toString()
-
     }
 
     private fun finishQuiz() {

@@ -15,10 +15,10 @@
         android:name=".MyApplication"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".QuestionActivity"
+            android:name=".ui.QuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
